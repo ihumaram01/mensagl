@@ -1,11 +1,13 @@
-  GNU nano 7.2                                                                                                                                                                                                                                                                                                                                                                                                                                                  /etc/ejabberd/ejabberd.yml                                                                                                                                                                                                                                                                                                                                                                                                                                                            hosts:
+hosts:
   - "ivanhumara.duckdns.org"
 
 loglevel: info
 
 certfiles:
   - /opt/ejabberd/*.pem
-#  - /home/ubuntu/privkey.pem
+#  - /opt/ejabberd/fulchain.pem
+#  - /opt/ejabberd/privkey.pem
+#  - /opt/ejabberd/ejabberd.pem
 ## If you already have certificates, list them here
 # certfiles:
 #  - /etc/letsencrypt/live/domain.tld/fullchain.pem
@@ -67,7 +69,7 @@ listen:
     module: ejabberd_stun
     use_turn: true
     ## The server's public IPv4 address:
-    # turn_ipv4_address: "203.0.113.3"
+    #turn_ipv4_address: "3.235.132.43"
     ## The server's public IPv6 address:
     # turn_ipv6_address: "2001:db8::3"
   -
@@ -94,6 +96,8 @@ acl:
 access_rules:
   local:
     allow: local
+  upload:
+    - allow: all
   c2s:
     deny: blocked
     allow: all
@@ -168,11 +172,20 @@ modules:
   mod_fail2ban: {}
   mod_http_api: {}
   mod_http_upload:
-    put_url: https://@HOST@:5443/upload
+    docroot: /opt/ejabberd
+    put_url: "https://ivanhumara.duckdns.org/upload"
+    access: all
     custom_headers:
-      "Access-Control-Allow-Origin": "https://@HOST@"
+      "Access-Control-Allow-Origin": "*"
       "Access-Control-Allow-Methods": "GET,HEAD,PUT,OPTIONS"
       "Access-Control-Allow-Headers": "Content-Type"
+    max_size: 524288000
+#  mod_http_upload:
+#    put_url: https://@HOST@:5443/upload
+#    custom_headers:
+#      "Access-Control-Allow-Origin": "https://@HOST@"
+#      "Access-Control-Allow-Methods": "GET,HEAD,PUT,OPTIONS"
+#      "Access-Control-Allow-Headers": "Content-Type"
   mod_last: {}
   mod_mam:
     ## Mnesia is limited to 2GB, better to use an SQL backend
@@ -244,11 +257,4 @@ sql_database: "ejabberd_db"
 sql_username: "ejabberd"
 sql_password: "Admin1"
 sql_port: 5432
-default_db: sql
-
-
-
-
-
-
-
+#default_db: sql
