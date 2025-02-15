@@ -1,3 +1,4 @@
+# Ivan Humara Miranda
 #!/bin/bash
 # Actualizar el sistema e instalar Wordpress
 sudo rm -rf /var/lib/apt/lists/*
@@ -59,4 +60,5 @@ sudo a2enmod ssl
 sudo a2enmod headers
 sudo a2ensite default-ssl.conf
 sudo a2dissite 000-default.conf
-sudo systemctl reload apache2
+sudo systemctl restart apache2
+sudo systemctl status apache2
